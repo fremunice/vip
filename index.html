@@ -1,130 +1,253 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Website Under Maintenance</title>
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #0d253f;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            flex-direction: column;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      font-size: 20px; /* Ukuran teks utama */
+      margin: 20px;
+      background-color: #2c2c2c;
+      color: #ffffff;
+    }
 
-        .container {
-            background-color: #1f2d3d;
-            padding: 50px;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-        }
+    /* Area teks */
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin-top: 10px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 18px;
+      background-color: #1e1e1e;
+      color: #ffffff;
+      border: 1px solid #333;
+      padding: 12px;
+      box-sizing: border-box;
+    }
 
-        h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            color: #f3a847;
-        }
+    /* Input teks */
+    input {
+      width: 100%;
+      margin-top: 10px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 18px;
+      background-color: #1e1e1e;
+      color: #ffffff;
+      border: 1px solid #333;
+      padding: 12px;
+      box-sizing: border-box;
+    }
 
-        p {
-            font-size: 20px;
-            margin-bottom: 30px;
-            color: #bbb;
-        }
+    /* Tombol */
+    button {
+      background-color: #d97706;
+      color: #fff;
+      margin-top: 10px;
+      padding: 8px 12px;
+      font-size: 16px;
+      cursor: pointer;
+      border: 1px solid #cc6f00;
+      border-radius: 10px;
+    }
+    button:hover {
+      background-color: #b45309;
+    }
 
-        .message {
-            margin-top: 30px;
-            font-size: 18px;
-        }
+    /* Kontainer */
+    .container {
+      margin-bottom: 40px;
+      border: 1px solid #333;
+      padding: 20px;
+      border-radius: 20px;
+    }
 
-        .contact {
-            margin-top: 40px;
-            font-size: 16px;
-        }
+    /* Kelompok tombol */
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center; /* Supaya tombol di tengah */
+      margin-top: 10px;
+    }
+    .button-group button {
+      margin-top: 0;
+    }
+  </style>
 
-        .contact a {
-            color: #f3a847;
-            text-decoration: none;
-            font-weight: bold;
-        }
+  <script>
+    // =========== DISABLE INSPECT / RIGHT-CLICK ===========
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.addEventListener('keydown', function (event) {
+      if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 's' || event.key === 'S')) {
+        event.preventDefault();
+      }
+      if (event.ctrlKey && event.shiftKey && (
+        event.key === 'i' || event.key === 'I' ||
+        event.key === 'j' || event.key === 'J' ||
+        event.key === 'c' || event.key === 'C'
+      )) {
+        event.preventDefault();
+      }
+      if (event.key === 'F12') {
+        event.preventDefault();
+      }
+    });
 
-        .contact a:hover {
-            text-decoration: underline;
-        }
+    // =========== BACKLINK GENERATOR ===========
+    function generateBacklinks() {
+      let input = document.getElementById('links').value.trim();
+      let output1 = document.getElementById('output1');
+      let output2 = document.getElementById('output2');
+      let output3 = document.getElementById('output3');
+      let output4 = document.getElementById('output4');
 
-        .loader {
-            margin-top: 40px;
-            display: flex;
-            justify-content: center;
-        }
+      // Kosongkan output sebelum memproses
+      output1.value = '';
+      output2.value = '';
+      output3.value = '';
+      output4.value = '';
 
-        .loader span {
-            display: block;
-            width: 15px;
-            height: 15px;
-            margin: 0 5px;
-            background-color: #f3a847;
-            border-radius: 50%;
-            animation: pulse 1.2s infinite ease-in-out;
-        }
+      let lines = input.split('\n');
+      lines.forEach(line => {
+        let url = line.trim();
+        if (url) {
+          let slug = url.split('/').pop()
+            .replace(/\.html$/, '')
+            .replace(/[^a-zA-Z0-9\s-]/g, '')
+            .toLowerCase()
+            .trim()
+            .replace(/-/g, ' ');
 
-        .loader span:nth-child(1) {
-            animation-delay: 0s;
-        }
+          let anchor = slug; // text anchor
 
-        .loader span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
+          // Format-output 1
+          output1.value += `<a href="${url}">${anchor}</a>\n`;
 
-        .loader span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
+          // Format-output 2
+          output2.value += `'${anchor}' => '${url}',\n`;
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 0.8;
-            }
-            50% {
-                transform: scale(1.5);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 0.8;
-            }
+          // Format-output 3
+          output3.value += `<a style="display:none" href="${url}">${anchor}</a>\n`;
+
+          // Format-output 4
+          output4.value += slug.replace(/\s+/g, '-') + '\n';
         }
-    </style>
+      });
+    }
+
+    function copyToClipboard(id) {
+      let textArea = document.getElementById(id);
+      textArea.select();
+      document.execCommand('copy');
+    }
+
+    function downloadFile(id, filename) {
+      let textArea = document.getElementById(id).value;
+      let blob = new Blob([textArea], { type: 'text/plain' });
+      let link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      link.click();
+    }
+
+    // =========== CASE CONVERTER ===========
+    function toSentenceCase() {
+      let text = document.getElementById("inputText").value;
+      text = text.trim();
+      if (!text) {
+        document.getElementById("outputText").value = "";
+        return;
+      }
+      // Contoh: "ini kalimat" -> "Ini kalimat"
+      let sentenceCased = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+      document.getElementById("outputText").value = sentenceCased;
+    }
+
+    function toLowerCaseText() {
+      let text = document.getElementById("inputText").value;
+      document.getElementById("outputText").value = text.toLowerCase();
+    }
+
+    function toUpperCaseText() {
+      let text = document.getElementById("inputText").value;
+      document.getElementById("outputText").value = text.toUpperCase();
+    }
+
+    function toCapitalizedCase() {
+      let text = document.getElementById("inputText").value.toLowerCase();
+      let words = text.split(" ");
+      for (let i = 0; i < words.length; i++) {
+        if (words[i].length > 0) {
+          words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+        }
+      }
+      document.getElementById("outputText").value = words.join(" ");
+    }
+  </script>
 </head>
 <body>
-    <div class="container">
-        <h1>We’re Currently Under Maintenance</h1>
-        <p>We are upgrading our website. We’ll be back online soon. Thanks for your patience!</p>
-        
-        <div class="loader">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        
-        <div class="message">
-            <p>Feel free to reach out to us if you need any assistance.</p>
-        </div>
 
-        <div class="contact">
-            <p>Contact us at <a href="/">click here</a></p>
-        </div>
+  <!-- =========== BAGIAN BACKLINK GENERATOR =========== -->
+  <div class="container">
+    <label for="links"></label>
+    <textarea id="links" placeholder="https://contoh.com/folder/contoh-link.html"></textarea>
+
+    <div class="button-group">
+      <button onclick="generateBacklinks()">Generate Backlinks</button>
     </div>
+
+    <!-- Output 1 -->
+    <textarea id="output1" readonly placeholder="Hasil format 1"></textarea>
+    <div class="button-group">
+      <button onclick="copyToClipboard('output1')">Copy</button>
+      <button onclick="downloadFile('output1', 'backlinks-1.txt')">Download</button>
+    </div>
+
+    <!-- Output 2 -->
+    <textarea id="output2" readonly placeholder="Hasil format 2"></textarea>
+    <div class="button-group">
+      <button onclick="copyToClipboard('output2')">Copy</button>
+      <button onclick="downloadFile('output2', 'backlinks-2.txt')">Download</button>
+    </div>
+
+    <!-- Output 3 -->
+    <textarea id="output3" readonly placeholder="Hasil format 3"></textarea>
+    <div class="button-group">
+      <button onclick="copyToClipboard('output3')">Copy</button>
+      <button onclick="downloadFile('output3', 'backlinks-3.txt')">Download</button>
+    </div>
+
+    <!-- Output 4 -->
+    <textarea id="output4" readonly placeholder="Hasil format 4"></textarea>
+    <div class="button-group">
+      <button onclick="copyToClipboard('output4')">Copy</button>
+      <button onclick="downloadFile('output4', 'backlinks-4.txt')">Download</button>
+    </div>
+  </div>
+
+  <!-- =========== BAGIAN CASE CONVERTER =========== -->
+  <div class="container">
+    <label for="inputText"></label>
+    <textarea id="inputText" placeholder="Tulis teks di sini..."></textarea>
+
+    <!-- Tombol Case Converter -->
+    <div class="button-group">
+      <button onclick="toSentenceCase()">SentenceCase</button>
+      <button onclick="toLowerCaseText()">LowerCaseText</button>
+      <button onclick="toUpperCaseText()">UpperCaseText</button>
+      <button onclick="toCapitalizedCase()">CapitalizedCase</button>
+    </div>
+
+    <textarea id="outputText" readonly placeholder="Hasil konversi..."></textarea>
+    <div class="button-group">
+      <!-- Copy hasil Case Converter -->
+      <button onclick="copyToClipboard('outputText')">Copy</button>
+    </div>
+  </div>
+
 </body>
 </html>
